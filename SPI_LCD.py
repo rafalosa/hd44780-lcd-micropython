@@ -2,7 +2,6 @@ import machine
 import time
 
 
-
 class SPILCD:
 
     def __init__(self,data_pins,EN_pin,RS_pin,RW_pin,lcd_size):
@@ -16,7 +15,7 @@ class SPILCD:
         self.enable_pin = None
         self.select_pin = None
         self.readwrite_pin = None
-        self.__ENABLE_TIME = 450/10e8
+        self.__ENABLE_TIME = 1e-5
 
     def initialize(self):
 
@@ -24,20 +23,18 @@ class SPILCD:
         self.enable_pin = machine.Pin(self.enable_pin_ind,machine.Pin.OUT)
         self.select_pin = machine.Pin(self.select_pin_ind,machine.Pin.OUT)
         self.readwrite_pin = machine.Pin(self.readwrite_pin_ind,machine.Pin.OUT)
-        print("Done set pins output")
 
         self.__shift_command("000010")  # Set display to 4-bit operation.
-        print("Done 4 bit")
         self.__shift_command("001000")  # Set display to 2 lines, 5x8 dots digits
-        print("Done DL")
+
         self.__shift_command("000000")
-        print("Done turn on")
-        self.__shift_command("001110")
-        print("Done cursor shift")
+        self.__shift_command("001111")  # Set cursor
+
         self.__shift_command("000000")
-        print("Done 4 bit")
-        self.__shift_command("000110")
-        print("Done entry mode")
+        self.__shift_command("000110")  # Entry mode
+
+        self.__shift_command("000000")
+        self.__shift_command("000010")  # Return home
 
     def clear(self):
 
