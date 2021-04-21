@@ -5,7 +5,7 @@ import machine
 
 # todo: Add some error and exception handling.
 # todo: Add optional compatibility with 5x10 dots displays.
-# todo: Works kinda slow, try removing some of the type conversions to speed it up.
+# todo: Convert commands system to work with bytes instead of strings.
 
 
 class LCD:
@@ -51,10 +51,16 @@ class LCD:
         self.__shift_command("000000")
         self.__shift_command("000001")
 
-    def print(self,string:str):
+    def print(self,parameter):
         '''Prints the given string at current cursor position.'''
-        for char in string:
-            self.__print_char(char)
+
+        if isinstance(parameter,str):
+            for char in parameter:
+                self.__print_char(char)
+        else:
+            address = '{:08b}'.format(parameter)
+            self.__shift_command("10" + address[:4])
+            self.__shift_command("10" + address[4:])
 
     def __print_char(self,char:str):
 
@@ -103,4 +109,16 @@ class LCD:
             self.__shift_command("000001")
             self.__shift_command("001000")
 
+    def create_char(self,address_index,char_bytes):
+
+        CGRAM_address = '{:08b}'.format(64+address_index)
+
+        self.__shift_command("00" + CGRAM_address[:4])
+        self.__shift_command("00" + CGRAM_address[4:])  # set CGRAM adress
+
+        for byte in char_bytes:
+            self.__shift_command("10000" + byte[0])
+            self.__shift_command("10" + byte[1:])
+
+        self.set_cursor((0,0))
 
