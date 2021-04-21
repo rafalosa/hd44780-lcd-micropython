@@ -8,7 +8,8 @@ import machine
 # todo: Works kinda slow, try removing some of the type conversions to speed it up.
 
 
-class SPILCD:
+class LCD:
+    '''Class for convenient handling of a LCD display via parallel interface.'''
 
     def __init__(self,data_pins:list,EN_pin:int,RS_pin:int,RW_pin:int,lcd_size:tuple):
         self.data_pins_ind = data_pins
