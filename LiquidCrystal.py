@@ -102,7 +102,7 @@ class LCD:
     def scroll_display(self,direction:int):
         '''Moves the entire display contents by 1. dir = 1 increment, dir = -1 decrement'''
 
-        if direction == 1:
+        if direction == 1
             self.__shift_command("000001")
             self.__shift_command("001100")
         elif direction == -1:
@@ -111,7 +111,7 @@ class LCD:
 
     def create_char(self,address_index,char_bytes):
 
-        CGRAM_address = '{:08b}'.format(64+address_index)
+        CGRAM_address = '{:08b}'.format(64+8*address_index)
 
         self.__shift_command("00" + CGRAM_address[:4])
         self.__shift_command("00" + CGRAM_address[4:])  # set CGRAM adress
